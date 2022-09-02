@@ -1,8 +1,8 @@
-import { state } from "@angular/animations";
-import { createAction, on, createReducer, createFeatureSelector, createSelector } from "@ngrx/store";
+import { on, createReducer, createFeatureSelector, createSelector } from "@ngrx/store";
 import * as AppState from '../../state/app.state'
 
 import { Product } from "../product";
+import * as ProductActions from "./product.actions"
 
 export interface State extends AppState.State {
     products: ProductState
@@ -38,7 +38,7 @@ export const getProducts = createSelector(
 
 export const productReducer = createReducer<ProductState>(
     initialState,
-    on(createAction('[Product] Toggle Product Code'), (state) : ProductState => {
+    on(ProductActions.toggleProductCode, (state) : ProductState => {
        console.log('original state:' + JSON.stringify(state))
         return{
             ...state,
