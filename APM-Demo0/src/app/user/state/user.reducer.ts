@@ -1,8 +1,37 @@
-import { createAction, on, createReducer } from "@ngrx/store";
+import { createAction, on, createReducer, createFeatureSelector, createSelector } from "@ngrx/store";
+import * as AppState from '../../state/app.state'
 
-export const userReducer = createReducer(
-    { maskUserName: true },
-    on(createAction('[User] Mask User Name'), state => {
+import { User } from "../user";
+
+export interface State extends AppState.State {
+    users: UserState
+}
+
+export interface UserState {
+    maskUserName: boolean;
+    currentUser: User [];
+}
+
+const initialState : UserState = {
+    maskUserName: true,
+    currentUser: [],
+}
+
+const getUserFeatureState = createFeatureSelector<UserState>('users');
+
+export const getMaskUserName = createSelector(
+    getUserFeatureState,
+    state => state.maskUserName
+)
+
+export const getCurrentUser = createSelector(
+    getUserFeatureState,
+    state => state.currentUser
+)
+
+export const userReducer = createReducer<UserState>(
+    initialState,
+    on(createAction('[User] Mask User Name'), (state) : UserState => {
         console.log('original user state:' + JSON.stringify(state))
         return {
             ...state,
