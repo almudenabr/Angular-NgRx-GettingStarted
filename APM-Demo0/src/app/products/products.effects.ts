@@ -7,11 +7,11 @@ import * as ProductActions from "./state/product.actions";
 @Injectable()
 export class ProductEffects {
 
-    constructor(private action$: Actions,
+    constructor(private actions$: Actions,
                 private productService: ProductService) {}
 
     loadProducts$ = createEffect(() => {
-        return this.action$.pipe(
+        return this.actions$.pipe(
             ofType(ProductActions.loadProducts),
             mergeMap(action => 
                 this.productService.getProducts().pipe(
