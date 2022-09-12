@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { Product } from '../product';
-import { getCurrentProduct, getProducts, getShowProductCode, State } from '../state/product.reducer';
+import { getCurrentProduct, getError, getProducts, getShowProductCode, State } from '../state/product.reducer';
 import * as ProductActions from '../state/product.actions'
 import { Observable } from 'rxjs';
 
@@ -14,13 +14,11 @@ import { Observable } from 'rxjs';
 })
 export class ProductListComponent implements OnInit {
   pageTitle = 'Products';
-  errorMessage: string;
-
-  displayCode: boolean;
 
   products$: Observable<Product[]>;
   selectedProduct$: Observable<Product>;
   displayCode$: Observable<boolean>;
+  errorMessage$: Observable<string>;
 
   constructor(private store: Store<State>) { }
 
@@ -34,9 +32,16 @@ export class ProductListComponent implements OnInit {
     // });
 
     //here we separate the getting and setting products into dispatching a loadProducts action and listening to the store with a getProducts selector
-    this.products$ = this.store.select(getProducts);    
+    // Do NOT subscribe here because it uses an async pipe
+    // This gets the initial values until the load is complete.
+    this.products$ = this.store.select(getProducts); 
+    
+    // Do NOT subscribe here because it uses an async pipe
+    this.errorMessage$ = this.store.select(getError);
+
     this.store.dispatch(ProductActions.loadProducts());
 
+    // Do NOT subscribe here because it uses an async pipe
     this.displayCode$ = this.store.select(getShowProductCode);
   }
 
