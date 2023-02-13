@@ -46,7 +46,8 @@ export class ProductListComponent implements OnInit {
   }
 
   checkChanged(): void {
-    // this.displayCode = !this.displayCode;
+    // this.displayCode = !this.displayCode; //will not maintain the check after navigating to other page
+    // we dispatch the action to get the actual state
     this.store.dispatch(ProductActions.toggleProductCode())
   }
 
